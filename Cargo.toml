@@ -1,0 +1,11 @@
+[package]
+name = "combarc"
+version = "0.1.0"
+edition = "2024"
+license = "GPL-3.0-only"
+readme = "README.md"
+authors = ["Snowy <snowy@snowymouse.com>"]
+description = "Copy-on-mutable-borrow reference counter type provider"
+repository = "https://github.com/SnowyMouse/combarc"
+
+[dependencies]
