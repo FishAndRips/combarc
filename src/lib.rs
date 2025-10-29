@@ -13,8 +13,8 @@
 //! Note that interior mutability (e.g. [`Cell::set`]) won't trigger a clone.
 //!
 //! This crate uses no unsafe code directly and only uses the `alloc` crate. It provides both a
-//! [`CombArc`] and [`CombRc`], the difference being that [`CombArc`] is atomic and thread-safe,
-//! where [`CombRc`] is not thread-safe and cannot be moved across threads.
+//! `CombArc` and `CombRc`, the difference being that `CombArc` is atomic and thread-safe,
+//! where `CombRc` is not thread-safe and cannot be moved across threads.
 //!
 //! [`Arc::as_ref`]: alloc::sync::Arc::as_ref
 //! [`Arc::make_mut`]: alloc::sync::Arc::make_mut
@@ -24,7 +24,7 @@
 //!
 //! ## Examples
 //!
-//! In this example, [`CombArc`] is used, but [`CombRc`] can be used interchangeably here.
+//! In this example, `CombArc` is used, but `CombRc` can be used interchangeably here.
 //!
 //! ```rust
 //! use combarc::CombArc;
