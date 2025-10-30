@@ -1,3 +1,4 @@
+use alloc::borrow::ToOwned;
 use alloc::rc::Rc;
 use core::cmp::Ordering;
 use core::fmt::Formatter;
@@ -16,7 +17,7 @@ pub struct CombRc<T: Clone> {
 }
 
 impl<T: Clone> CombRc<T> {
-    /// Constructs a `CobRc`.
+    /// Constructs a `CombRc`.
     #[inline]
     pub fn new(what: T) -> CombRc<T> {
         Self {
@@ -24,7 +25,7 @@ impl<T: Clone> CombRc<T> {
         }
     }
 
-    /// Constructs a `CobRc` from an already created `Rc`.
+    /// Constructs a `CombRc` from an already created `Rc`.
     #[inline]
     pub fn from_rc(what: Rc<T>) -> CombRc<T> {
         Self {
@@ -32,10 +33,27 @@ impl<T: Clone> CombRc<T> {
         }
     }
 
-    /// Clones the inner value stored in the `CobRc`, returning a unique clone of it.
+    /// Clones the inner value stored in the `CombRc`, returning a unique clone of it.
     #[inline]
     pub fn clone_unique(what: &CombRc<T>) -> CombRc<T> {
         Self::new(what.inner.as_ref().clone())
+    }
+
+    /// Attempt to get the inner value inside of the `CombRc`.
+    ///
+    /// If this is a unique reference, the inner value will be moved. Otherwise, the reference will
+    /// be re-returned.
+    #[inline]
+    pub fn try_unwrap(what: CombRc<T>) -> Result<T, Self> {
+        Rc::try_unwrap(what.inner).map_err(Self::from_rc)
+    }
+
+    /// Try to get the inner value inside of the `CombArc` or clone otherwise.
+    ///
+    /// If this is a unique reference, the inner value will be moved. Otherwise, it will be cloned.
+    #[inline]
+    pub fn make_inner(what: CombRc<T>) -> T {
+        Rc::try_unwrap(what.inner).unwrap_or_else(|e| T::to_owned(e.as_ref()))
     }
 
     /// Get the inner `Rc` value.

@@ -1,12 +1,12 @@
 [package]
 name = "combarc"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2018"
 license = "GPL-3.0-only"
 readme = "README.md"
 authors = ["Snowy <snowy@snowymouse.com>"]
 description = "Copy-on-mutable-borrow reference counter type provider"
-repository = "https://github.com/SnowyMouse/combarc"
+repository = "https://github.com/FishAndRips/combarc"
 rust-version = "1.78.0"
 
 [dependencies]

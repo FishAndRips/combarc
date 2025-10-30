@@ -35,8 +35,8 @@
 //! let another_value = my_value.clone();
 //! assert_eq!(my_value, another_value);
 //!
-//! // Cell::set uses interior mutability and does not mutably borrow, so
-//! // they still point to the same memory address.
+//! // Cell::set uses interior mutability and does not mutably borrow,
+//! // so they still point to the same memory address.
 //! my_value.set(true);
 //! assert_eq!(my_value, another_value);
 //! assert_eq!(my_value.as_ptr(), another_value.as_ptr());
