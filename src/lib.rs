@@ -10,17 +10,22 @@
 //! * If there are no strong references but there are weak references, then all weak references get
 //!   dissociated and can no longer upgrade.
 //!
-//! Note that interior mutability (e.g. [`Cell::set`]) won't trigger a clone.
+//! This crate provides both a `CombArc` and `CombRc` type, the difference being that `CombArc` is
+//! atomic and thread-safe, wrapping an [`Arc`], where `CombRc` is not thread-safe, wrapping over a
+//! [`Rc`] and cannot be moved across threads.
 //!
-//! This crate uses no unsafe code directly and only uses the `alloc` crate. It provides both a
-//! `CombArc` and `CombRc`, the difference being that `CombArc` is atomic and thread-safe,
-//! where `CombRc` is not thread-safe and cannot be moved across threads.
+//! When using this, there are a few things to keep in mind:
+//! * Only mutable borrows on the `CombArc` and `CombRc` instances through `DerefMut` will trigger
+//!   clones.
+//! * Interior mutability which uses immutable borrows (e.g. [`Cell::set`]) won't trigger a clone
+//!   even if there are multiple strong references. Use `clone_unique` to force a clone.
+//! * Using `DerefMut` WITHOUT actually mutating the inner object can still trigger a clone. If you
+//!   need manual control over when something is cloned, using the standard library's [`Cow`] type
+//!   might be more what you are looking for.
 //!
-//! [`Arc::as_ref`]: alloc::sync::Arc::as_ref
-//! [`Arc::make_mut`]: alloc::sync::Arc::make_mut
-//! [`Deref`]: core::ops::Deref
-//! [`DerefMut`]: core::ops::DerefMut
-//! [`Cell::set`]: core::cell::Cell::set
+//! ## Unsafe code
+//!
+//! This crate uses no unsafe code directly and only uses safe methods from the `alloc` crate.
 //!
 //! ## Examples
 //!
@@ -55,6 +60,15 @@
 //! assert_ne!(my_value.as_ptr(), another_value.as_ptr());
 //! assert_eq!(my_value, another_value);
 //! ```
+//!
+//! [`Arc::as_ref`]: alloc::sync::Arc::as_ref
+//! [`Arc::make_mut`]: alloc::sync::Arc::make_mut
+//! [`Arc`]: alloc::sync::Arc
+//! [`Rc`]: alloc::rc::Rc
+//! [`Cow`]: alloc::borrow::Cow
+//! [`Deref`]: core::ops::Deref
+//! [`DerefMut`]: core::ops::DerefMut
+//! [`Cell::set`]: core::cell::Cell::set
 #![no_std]
 #![forbid(unsafe_code)]
 #![forbid(dead_code)]
